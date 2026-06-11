@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Paloma &amp; Fran · 21·11·2026</title>
 <link rel="icon" type="image/png" href="assets/dibujo ceremonia.png" />
+<meta property="og:title" content="Paloma &amp; Fran · 21·11·2026" />
+<meta property="og:description" content="¡Nos casamos! Te invitamos a celebrar con nosotros en Mendoza." />
+<meta property="og:image" content="assets/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Paloma &amp; Fran · 21·11·2026" />
+<meta name="twitter:image" content="assets/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:wght@300;400;500;600;700&family=Sacramento&family=Great+Vibes&display=swap" rel="stylesheet" />
@@ -480,6 +489,49 @@
   @media (prefers-reduced-motion: reduce) {
     .secret-reveal { animation: none; }
   }
+
+  /* ——— Photo Carousel ——— */
+  .photo-carousel {
+    width: 100%;
+    padding: 40px 0 32px;
+    overflow: hidden;
+    position: relative;
+  }
+  .pc-track {
+    position: relative;
+    width: calc(100% - 48px);
+    margin: 0 auto;
+    height: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .pc-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translate(0, 0);
+    transition: opacity 1.6s ease, transform 1.6s cubic-bezier(.25,0,.1,1);
+    pointer-events: none;
+  }
+  .pc-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pc-slide.pc-enter-left  { opacity: 0; transform: translate(-70px, -45px); }
+  .pc-slide.pc-enter-right { opacity: 0; transform: translate( 70px, -45px); }
+  .pc-slide.active {
+    opacity: 1;
+    transform: translate(0, 0);
+    pointer-events: auto;
+  }
+  .pc-slide.pc-exit {
+    opacity: 0;
+    transform: translate(0, 0);
+    transition: opacity 0.5s ease;
+  }
+  .pc-dots { display: none; }
 
   /* ——— Itinerary ——— */
   .itinerary {
@@ -992,6 +1044,27 @@
     </div>
   </section>
 
+  <!-- ——— FOTO CARROUSEL ——— -->
+  <section class="photo-carousel reveal" id="photoCarousel">
+    <div class="pc-track" id="pcTrack">
+      <div class="pc-slide"><img src="assets/fyp1.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp2.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp3.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp4.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp5.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp6.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp7.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp8.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp9.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp10.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp11.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp12.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp13.jpeg" alt="" loading="lazy" /></div>
+      <div class="pc-slide"><img src="assets/fyp14.jpeg" alt="" loading="lazy" /></div>
+    </div>
+    <div class="pc-dots" id="pcDots"></div>
+  </section>
+
   <!-- ——— VENUE ILLUSTRATION (two layers: mountains, then bodega fades in) ——— -->
   <div class="venue-illus reveal" id="venue">
     <img src="assets/mountains.png" alt="Montañas de Mendoza" class="v-mountains" />
@@ -1449,6 +1522,65 @@
       });
     });
   }
+</script>
+
+<script>
+  // ——— Photo Carousel ———
+  (function () {
+    const track  = document.getElementById('pcTrack');
+    const slides = track ? Array.from(track.querySelectorAll('.pc-slide')) : [];
+    if (!slides.length) return;
+
+    let current   = 0;
+    let direction = 0;
+    let timer     = null;
+    let animating = false;
+
+    slides[0].classList.add('active');
+
+    function goTo(idx) {
+      if (animating) return;
+      const next = (idx + slides.length) % slides.length;
+      if (next === current) return;
+      animating = true;
+
+      const incoming   = slides[next];
+      const outgoing   = slides[current];
+      const enterClass = direction % 2 === 0 ? 'pc-enter-left' : 'pc-enter-right';
+      direction++;
+
+      incoming.classList.add(enterClass);
+      incoming.style.transition = 'none';
+      incoming.offsetHeight; // force reflow
+      incoming.style.transition = '';
+
+      requestAnimationFrame(() => {
+        incoming.classList.remove(enterClass);
+        incoming.classList.add('active');
+        outgoing.classList.add('pc-exit');
+        outgoing.classList.remove('active');
+      });
+
+      setTimeout(() => {
+        outgoing.classList.remove('pc-exit');
+        current   = next;
+        animating = false;
+      }, 1700);
+    }
+
+    function startAuto() { timer = setInterval(() => goTo(current + 1), 2500); }
+    function stopAuto()  { clearInterval(timer); }
+
+    startAuto();
+
+    let startX = 0;
+    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+    track.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+      startAuto();
+    }, { passive: true });
+  })();
 </script>
 
 </body>
