@@ -298,7 +298,15 @@
     text-align: center;
     padding-top: 8px;
   }
-  .hero .display { margin-bottom: 58px; }
+  .titulo-gif {
+    display: block;
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    margin: 0 auto 40px;
+    transform: rotate(-5deg);
+  }
+  .titulo-gif-hidden { visibility: hidden; height: 0 !important; margin: 0 !important; }
 
   /* Hero art: mountains layered behind the couple */
   .hero-art {
@@ -1029,7 +1037,9 @@
 
   <!-- ——— HERO ——— -->
   <section class="hero reveal">
-    <h1 class="display">¡Nos casamos!</h1>
+    <!-- Título GIF — comentar la línea de abajo y descomentar el h1 para volver al texto -->
+    <img alt="¡Nos casamos!" class="titulo-gif titulo-gif-hidden" id="tituloGif" />
+    <!-- <h1 class="display">¡Nos casamos!</h1> -->
     <div class="hero-art" id="heroArt">
       <img src="assets/dibujo web.png" alt="Paloma y Fran" class="ha-couple" />
     </div>
@@ -1456,6 +1466,23 @@
     if (window.__invitationOpen) playHero();
     else window.addEventListener('invitation:open', playHero, { once: true });
   }
+
+  // ——— Título GIF: arranca cuando el sobre se cierra, queda en último frame ———
+  (function () {
+    const img = document.getElementById('tituloGif');
+    if (!img) return;
+    const ENVELOPE_CLOSE = 2300;
+
+    function launchGif() {
+      setTimeout(() => {
+        img.src = 'assets/titulo.gif';
+        img.classList.remove('titulo-gif-hidden');
+      }, ENVELOPE_CLOSE);
+    }
+
+    if (window.__invitationOpen) launchGif();
+    else window.addEventListener('invitation:open', launchGif, { once: true });
+  })();
 
   // ——— Car drives away: shrinks toward its center on first scroll-in (one-shot per page load).
   const car = document.getElementById('car');
