@@ -303,10 +303,19 @@
     width: 100%;
     max-width: 440px;
     height: auto;
+    aspect-ratio: 565 / 146;
     margin: 0 auto 40px;
     transform: rotate(-5deg);
   }
-  .titulo-gif-hidden { visibility: hidden; height: 0 !important; margin: 0 !important; }
+  .titulo-gif-hidden { visibility: hidden; }
+  .titulo-gif.gif-enter {
+    animation: titulo-grow 1.1s cubic-bezier(.2, .7, .3, 1) forwards;
+  }
+  @keyframes titulo-grow {
+    from { transform: rotate(-5deg) scale(0.1); opacity: 0; }
+    60%  { opacity: 1; }
+    to   { transform: rotate(-5deg) scale(1);   opacity: 1; }
+  }
 
   /* Hero art: mountains layered behind the couple */
   .hero-art {
@@ -890,27 +899,23 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%) scale(0.1) rotate(-10deg);
+    transform: translate(-50%, -50%) scale(0.1) rotate(-5deg);
     transform-origin: 50% 50%;
     opacity: 0;
-    font-family: "Cherolina", "Brittany Signature", "Sacramento", "Great Vibes", cursive;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 116px;
-    letter-spacing: 0.02em;
-    color: var(--burgundy);
-    white-space: nowrap;
+    width: 80%;
+    max-width: 380px;
+    height: auto;
     pointer-events: none;
   }
   .car-wrap.cue-show .car-cue {
     animation: cue-grow 1.1s cubic-bezier(.2, .7, .3, 1) forwards;
   }
   @keyframes cue-grow {
-    from { transform: translate(-50%, -50%) scale(0.1) rotate(-10deg); opacity: 0; }
+    from { transform: translate(-50%, -50%) scale(0.1) rotate(-5deg); opacity: 0; }
     60%  { opacity: 1; }
-    to   { transform: translate(-50%, -50%) scale(1)   rotate(-10deg); opacity: 1; }
+    to   { transform: translate(-50%, -50%) scale(1)   rotate(-5deg); opacity: 1; }
   }
-  .car-wrap img {
+  .car-wrap img.illus {
     width: 200px;
     margin: 0 auto;
     transform-origin: 50% 50%;
@@ -918,7 +923,7 @@
     opacity: 1;
     will-change: transform, opacity, filter;
   }
-  .car-wrap.drive-away img {
+  .car-wrap.drive-away img.illus {
     animation: drive-away 2.6s cubic-bezier(.4, 0, .7, 1) forwards;
   }
   @keyframes drive-away {
@@ -926,8 +931,8 @@
     to   { transform: scale(0) translateY(-12px); opacity: 0; filter: blur(1.2px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .car-wrap.drive-away img { animation: none; opacity: 0; }
-    .car-wrap.cue-show .car-cue { animation: none; opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-10deg); }
+    .car-wrap.drive-away img.illus { animation: none; opacity: 0; }
+    .car-wrap.cue-show .car-cue { animation: none; opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
   }
 
   /* ——— Footer monogram ——— */
@@ -1009,7 +1014,7 @@
 
 <!-- ——— Envelope intro (first thing the user sees) ——— -->
 <div class="envelope-intro" id="envIntro" role="button" tabindex="0" aria-label="Toca para abrir la invitación">
-  <div class="env-eyebrow">Tienes una invitación</div>
+  <div class="env-eyebrow">Tenés una invitación</div>
   <div class="env-stage">
     <img src="assets/envelope.png" alt="" class="env-img" />
   </div>
@@ -1106,7 +1111,7 @@
     <!-- Revealed state -->
     <div id="secretRevealed" class="secret-reveal" hidden>
       <p class="body-text">¡La ubicación ya está disponible!</p>
-      <a class="btn" href="https://www.instagram.com/bodegagamboa/?hl=en" target="_blank" rel="noopener">Ver la bodega</a>
+      <a class="btn" href="#" target="_blank" rel="noopener">Ver la bodega</a>
     </div>
   </section>
 
@@ -1224,7 +1229,8 @@
   <!-- ——— CAR ——— -->
   <div class="car-wrap reveal" id="car">
     <img src="assets/car.png" alt="Just married" class="illus" />
-    <span class="car-cue">¡Preparate!</span>
+    <img class="car-cue" id="preparateGif" alt="¡Preparate!" />
+    <!-- <span class="car-cue">¡Preparate!</span> -->
   </div>
 
   <!-- ——— FOOTER MONOGRAM ——— -->
@@ -1477,6 +1483,7 @@
       setTimeout(() => {
         img.src = 'assets/titulo.gif';
         img.classList.remove('titulo-gif-hidden');
+        img.classList.add('gif-enter');
       }, ENVELOPE_CLOSE);
     }
 
@@ -1497,10 +1504,15 @@
     };
 
     // Once the car has fully shrunk away, grow the "¡Preparate!" cue from its center.
-    const carImg = car.querySelector('img');
+    const carImg = car.querySelector('img.illus');
     if (carImg) {
       carImg.addEventListener('animationend', () => {
-        car.classList.add('cue-show');
+        // Pausa breve, luego arranca el GIF y lo muestra
+        setTimeout(() => {
+          const gifEl = document.getElementById('preparateGif');
+          if (gifEl) gifEl.src = 'assets/preparate.gif';
+          car.classList.add('cue-show');
+        }, 350);
       });
     }
 
