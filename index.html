@@ -1322,6 +1322,19 @@
       }
     });
 
+    // ——— Pausar cuando el usuario sale de la página, retomar cuando vuelve
+    let wasPlayingBeforeHide = false;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        wasPlayingBeforeHide = !audio.paused;
+        if (wasPlayingBeforeHide) audio.pause();
+      } else {
+        if (wasPlayingBeforeHide) {
+          audio.play().then(() => toggle.classList.remove('muted')).catch(() => {});
+        }
+      }
+    });
+
     if (window.__invitationOpen) startMusic();
     else window.addEventListener('invitation:open', startMusic, { once: true });
   })();
