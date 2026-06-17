@@ -230,11 +230,20 @@
     font-family: var(--serif);
     font-style: italic;
     font-weight: 700;
-    font-size: 28px;
+    font-size: 20px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     text-align: center;
-    margin: 0 0 18px;
+    margin: 0 0 4px;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 26px;
+    height: 1px;
+    background: var(--burgundy);
+    opacity: 0.25;
+    margin: 7px auto 14px;
   }
 
   .meta {
@@ -353,23 +362,55 @@
   .hero .date {
     font-family: var(--serif);
     font-style: italic;
-    font-weight: 700;
-    font-size: 35px;
-    letter-spacing: 0.16em;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--burgundy);
-    margin-bottom: 8px;
-    /* use uniform-height (lining) numerals so the 6/0 don't ride taller than the rest */
+    opacity: 0.7;
+    margin-bottom: 14px;
     font-variant-numeric: lining-nums;
     font-feature-settings: "lnum" 1, "onum" 0;
   }
   .hero .names {
+    font-family: "Cherolina", "Brittany Signature", "Great Vibes", "Sacramento", cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 60px;
+    letter-spacing: 0em;
+    text-transform: none;
+    color: var(--burgundy);
+    line-height: 1.1;
+    margin: 10px 0 10px;
+  }
+  .names-cormorant,
+  .hero .names.names-cormorant {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
     font-size: 40px;
-    letter-spacing: 0.01em;
-    text-transform: none;
+    letter-spacing: 0.06em;
+    color: var(--burgundy);
+    margin: 10px 0 10px;
+  }
+  .names-cormorant .amp {
+    font-family: var(--sans);
+    font-style: italic;
+    font-size: 0.85em;
+    letter-spacing: 0;
+    font-family: "Cherolina", "Brittany Signature", "Great Vibes", "Sacramento", cursive;
+    font-style: normal;
+    font-size: 52px;
+    letter-spacing: 0em;
+    line-height: 1.1;
+    color: var(--burgundy);
+  }
+  .names-cherolina {
+    font-family: "Cherolina", "Brittany Signature", "Great Vibes", "Sacramento", cursive;
+    font-style: normal;
+    font-size: 52px;
+    letter-spacing: 0em;
+    line-height: 1.1;
     color: var(--burgundy);
   }
 
@@ -378,15 +419,15 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    margin: 36px auto 0;
-    max-width: 340px;
+    margin: 18px auto 0;
+    max-width: 280px;
   }
   .countdown .cell { text-align: center; }
   .countdown .num {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 700;
-    font-size: 38px;
+    font-size: 28px;
     line-height: 1;
     color: var(--burgundy);
     font-variant-numeric: lining-nums;
@@ -395,10 +436,10 @@
     font-family: var(--serif);
     font-style: italic;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-top: 4px;
+    margin-top: 3px;
     color: var(--burgundy);
   }
 
@@ -520,24 +561,26 @@
   .photo-carousel {
     width: 100%;
     padding: 40px 0 32px;
-    overflow: hidden;
     position: relative;
   }
-  .pc-track {
+  .pc-viewport {
     position: relative;
     width: calc(100% - 48px);
     margin: 0 auto;
-    height: 340px;
     border-radius: 12px;
     overflow: hidden;
+    height: 340px;
+  }
+  .pc-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.45s cubic-bezier(0.25, 0, 0.1, 1);
+    will-change: transform;
   }
   .pc-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transform: translate(0, 0);
-    transition: opacity 1.6s ease, transform 1.6s cubic-bezier(.25,0,.1,1);
-    pointer-events: none;
+    min-width: 100%;
+    flex-shrink: 0;
+    height: 100%;
   }
   .pc-slide img {
     width: 100%;
@@ -545,19 +588,34 @@
     object-fit: cover;
     display: block;
   }
-  .pc-slide.pc-enter-left  { opacity: 0; transform: translate(-70px, -45px); }
-  .pc-slide.pc-enter-right { opacity: 0; transform: translate( 70px, -45px); }
-  .pc-slide.active {
-    opacity: 1;
-    transform: translate(0, 0);
-    pointer-events: auto;
-  }
-  .pc-slide.pc-exit {
-    opacity: 0;
-    transform: translate(0, 0);
-    transition: opacity 0.5s ease;
-  }
   .pc-dots { display: none; }
+  .pc-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: rgba(244, 239, 230, 0.88);
+    border: 1px solid rgba(130, 17, 68, 0.2);
+    color: var(--burgundy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    font-size: 22px;
+    line-height: 1;
+    padding: 0 0 1px;
+    transition: background 0.15s ease, opacity 0.15s ease;
+    opacity: 0.82;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .pc-arrow:hover { background: var(--cream); opacity: 1; }
+  .pc-arrow:active { transform: translateY(-50%) scale(0.94); }
+  .pc-arrow-prev { left: 10px; }
+  .pc-arrow-next { right: 10px; }
 
   /* ——— Itinerary ——— */
   .itinerary {
@@ -665,7 +723,7 @@
   /* ——— Dress code ——— */
   .dress { text-align: center; margin-top: 56px; }
   .dress img {
-    width: 180px;
+    width: 90px;
     margin: 0 auto 14px;
     transform-origin: 50% 6%; /* swing from the top of the hangers */
     animation: hanger-sway 5.2s ease-in-out infinite;
@@ -713,7 +771,11 @@
     letter-spacing: 0.03em;
     color: var(--cocoa);
     margin: 0 0 14px;
-    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
   }
   .taken-item {
     display: flex;
@@ -785,19 +847,20 @@
 
   /* ——— RSVP / Asistencia ——— */
   .rsvp { text-align: center; margin-top: 56px; }
-  .rsvp img { width: 150px; margin: 0 auto 14px; }
+  .rsvp img { width: 90px; margin: 0 auto 14px; }
   .rsvp .body-text { margin: 0 auto 18px; max-width: 280px; }
 
   /* ——— Section separator (page break) ——— */
   .pagebreak {
     border: 0;
     border-top: 1px dashed var(--line);
-    margin: 64px -28px;
+    margin: 64px auto;
+    width: 30%;
   }
 
   /* ——— Obsequio ——— */
   .gift { text-align: center; margin-top: 8px; }
-  .gift img { width: 150px; margin: 0 auto 18px; }
+  .gift img { width: 90px; margin: 0 auto 18px; }
   .gift .body-text { margin: 0 auto 10px; max-width: 290px; }
   .gift-accounts-label {
     font-family: var(--serif);
@@ -1004,6 +1067,30 @@
   .music-toggle.muted .ic-on { display: none; }
   .music-toggle.muted .ic-off { display: block; }
 
+  /* ——— WhatsApp floating button ——— */
+  .wa-btn {
+    position: fixed;
+    left: 18px;
+    bottom: 20px;
+    z-index: 900;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--burgundy);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 6px 18px -6px rgba(82, 11, 44, 0.5);
+    transition: transform .15s ease, background .15s ease;
+    opacity: 0;
+    animation: music-appear .5s ease .2s forwards;
+  }
+  .wa-btn:hover { background: var(--burgundy-deep); }
+  .wa-btn:active { transform: scale(.94); }
+  .wa-btn svg { width: 22px; height: 22px; display: block; fill: currentColor; }
+
   /* ——— Reveal on scroll (only hides when JS enables it) ——— */
   .js-anim .reveal {
     opacity: 0;
@@ -1034,6 +1121,11 @@
 <audio id="bgMusic" loop preload="auto">
   <source src="assets/music.mp3" type="audio/mpeg" />
 </audio>
+<a id="waBtn" href="https://wa.me/5491136474963" class="wa-btn" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
 <button id="musicToggle" class="music-toggle" type="button" aria-label="Silenciar música" hidden>
   <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
@@ -1059,6 +1151,11 @@
     </div>
     <div class="date">21 · 11 · 2026</div>
     <div class="names">Paloma &amp; Francisco</div>
+    <div class="names">Paloma y Francisco</div>
+    <div class="names names-cormorant">Paloma y Francisco</div>
+    <div class="names names-cormorant">Paloma <span class="amp">&amp;</span> Francisco</div>
+    <div class="names names-cormorant">Paloma &amp; Francisco</div>
+
 
     <div class="countdown" aria-live="polite">
       <div class="cell"><div class="num" id="cd-d">--</div><div class="lbl">Días</div></div>
@@ -1070,24 +1167,68 @@
 
   <!-- ——— FOTO CARROUSEL ——— -->
   <section class="photo-carousel reveal" id="photoCarousel">
-    <div class="pc-track" id="pcTrack">
-      <div class="pc-slide"><img src="assets/fyp1.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp2.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp3.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp4.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp5.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp6.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp7.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp8.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp9.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp10.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp11.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp12.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp13.jpeg" alt="" loading="lazy" /></div>
-      <div class="pc-slide"><img src="assets/fyp14.jpeg" alt="" loading="lazy" /></div>
+    <div class="pc-viewport">
+      <div class="pc-track" id="pcTrack">
+        <div class="pc-slide"><img src="assets/fyp1.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp2.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp3.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp4.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp5.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp6.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp7.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp8.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp9.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp10.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp11.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp12.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp13.jpeg" alt="" loading="lazy" /></div>
+        <div class="pc-slide"><img src="assets/fyp14.jpeg" alt="" loading="lazy" /></div>
+      </div>
+      <button class="pc-arrow pc-arrow-prev" id="pcPrev" aria-label="Anterior">&#8249;</button>
+      <button class="pc-arrow pc-arrow-next" id="pcNext" aria-label="Siguiente">&#8250;</button>
     </div>
-    <div class="pc-dots" id="pcDots"></div>
   </section>
+
+  <hr class="pagebreak" />
+
+  <!-- ——— ITINERARIO ——— -->
+  <section class="itinerary reveal">
+    <h2 class="section-title">Itinerario</h2>
+
+    <div class="itin-card">
+      <div class="itin-list">
+      <div class="itin-item">
+        <span class="itin-icon" aria-hidden="true">
+          <img src="assets/dibujo ceremonia.png" alt="Ceremonia" style="width:52px;height:52px;object-fit:contain;" />
+        </span>
+        <div class="time"><span class="h">16:30</span> hs &middot; Ceremonia</div>
+      </div>
+
+      <div class="itin-item">
+        <span class="itin-icon" aria-hidden="true">
+          <img src="assets/dibujo recepcion.png" alt="Recepción" style="width:52px;height:52px;object-fit:contain;" />
+        </span>
+        <div class="time"><span class="h">18:00</span> hs &middot; Recepción</div>
+      </div>
+
+      <div class="itin-item">
+        <span class="itin-icon" aria-hidden="true">
+          <img src="assets/dibujo civil.png" alt="Civil" style="width:52px;height:52px;object-fit:contain;" />
+        </span>
+        <div class="time"><span class="h">19:00</span> hs &middot; Civil</div>
+      </div>
+
+      <div class="itin-item">
+        <span class="itin-icon" aria-hidden="true">
+          <img src="assets/dibujo fiesta.png" alt="Fiesta" style="width:52px;height:52px;object-fit:contain;" />
+        </span>
+        <div class="time"><span class="h">20:00</span> hs &middot; Fiesta</div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <hr class="pagebreak" />
 
   <!-- ——— VENUE ILLUSTRATION (two layers: mountains, then bodega fades in) ——— -->
   <div class="venue-illus reveal" id="venue">
@@ -1095,7 +1236,7 @@
     <img src="assets/bodega-building.png" alt="Bodega" class="v-bodega" />
   </div>
 
-  <!-- ——— SECRET LOCATION (button revealed 30 days before the wedding) ——— -->
+  <!-- ——— SECRET LOCATION ——— -->
   <section class="secret reveal" id="secret">
     <h2 class="section-title">Secret Location</h2>
 
@@ -1107,72 +1248,39 @@
           <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path>
         </svg>
       </div>
-      <p class="body-text">La ubicación es una sorpresa. Se revela <strong>30 días antes</strong> de la boda.</p>
-      <!-- <div class="countdown-pill">
+      <p class="body-text">La ubicación es sorpresa. Se revelará unos días antes de la boda.</p>
+      <div class="countdown-pill" hidden style="display:none">
         <div class="secret-countdown" aria-live="polite">
           <div class="cell"><div class="num" id="sc-d">--</div><div class="lbl">Días</div></div>
           <div class="cell"><div class="num" id="sc-h">--</div><div class="lbl">Horas</div></div>
         </div>
         <div class="hint">Faltan para descubrirla</div>
-      </div> -->
+      </div>
     </div>
 
     <!-- Revealed state -->
-    <!-- <div id="secretRevealed" class="secret-reveal" hidden>
+    <div id="secretRevealed" class="secret-reveal" hidden>
       <p class="body-text">¡La ubicación ya está disponible!</p>
       <a class="btn" href="#" target="_blank" rel="noopener">Ver la bodega</a>
-    </div> -->
-  </section>
-
-  <!-- ——— ITINERARIO ——— -->
-  <section class="itinerary reveal">
-    <h2 class="section-title">Itinerario</h2>
-
-    <div class="itin-card">
-      <div class="itin-list">
-      <div class="itin-item">
-        <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo ceremonia.png" alt="Ceremonia" style="width:80px;height:80px;object-fit:contain;" />
-        </span>
-        <div class="time"><span class="h">16:30</span> hs &middot; Ceremonia</div>
-      </div>
-
-      <div class="itin-item">
-        <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo recepcion.png" alt="Recepción" style="width:80px;height:80px;object-fit:contain;" />
-        </span>
-        <div class="time"><span class="h">18:00</span> hs &middot; Recepción</div>
-      </div>
-
-      <div class="itin-item">
-        <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo civil.png" alt="Civil" style="width:80px;height:80px;object-fit:contain;" />
-        </span>
-        <div class="time"><span class="h">19:00</span> hs &middot; Civil</div>
-      </div>
-
-      <div class="itin-item">
-        <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo fiesta.png" alt="Fiesta" style="width:80px;height:80px;object-fit:contain;" />
-        </span>
-        <div class="time"><span class="h">20:00</span> hs &middot; Fiesta</div>
-      </div>
     </div>
-  </div>
   </section>
+
+  <hr class="pagebreak" />
 
   <!-- ——— DRESS CODE ——— -->
   <section class="dress reveal">
     <img src="assets/dresscode.png" alt="" class="illus" />
     <h2 class="section-title">Dress code</h2>
     <div class="label">Elegante</div>
-    <p class="dress-taken">
-      Estos colores ya tienen dueño:<br>
+    <div class="dress-taken">
+      <span>Estos colores ya tienen dueño:</span>
       <span class="taken-item"><span class="taken-swatch swatch-white"></span>Blanco &rarr; Paloma</span>
       <span class="taken-item"><span class="taken-swatch swatch-beige"></span>Beige &rarr; Francisco</span>
-    </p>
+    </div>
     <a class="btn" href="https://pin.it/5YqnMKSGc" target="_blank" rel="noopener">Inspiración</a>
   </section>
+
+  <hr class="pagebreak" />
 
   <!-- ——— RSVP ——— -->
   <section class="rsvp reveal">
@@ -1184,6 +1292,8 @@
     <a class="btn" href="https://forms.gle/m4gL7ftcZtbu5Tb86" target="_blank" rel="noopener">Formulario</a>
   </section>
 
+  <hr class="pagebreak" />
+
   <!-- ——— RECOMENDACIONES ——— -->
   <section class="reco reveal">
     <h2 class="section-title">Recomendaciones</h2>
@@ -1193,18 +1303,7 @@
     <a class="btn" href="https://www.google.com/maps/d/u/0/edit?mid=1ryjwYa6fAf7IC1ruTo_V-kWqFMXVTl0&usp=sharing" target="_blank" rel="noopener">Ver mapa</a>
   </section>
 
-  <!-- ——— MENSAJE A LOS NOVIOS ——— -->
-  <!-- <section class="mensaje reveal">
-    <h2 class="section-title">Déjale un mensaje<br>a los novios</h2>
-    <form class="mensaje-form" id="mensajeForm">
-      <input class="mensaje-input" type="text" id="msgNombre" placeholder="Tu nombre" maxlength="60" autocomplete="name" />
-      <textarea class="mensaje-textarea" id="msgTexto" placeholder="Escribí tu mensaje aquí…" rows="4" maxlength="600"></textarea>
-      <button class="btn" type="submit">Enviar mensaje</button>
-    </form>
-    <p class="mensaje-sent" id="mensajeSent" hidden>♥ ¡Gracias por tu mensaje!</p>
-  </section> -->
-
-  <!-- ——— PAGE BREAK (mirrors the second column of the prototype) ——— -->
+  <!-- ——— PAGE BREAK ——— -->
   <hr class="pagebreak" />
 
   <!-- ——— OBSEQUIO ——— -->
@@ -1410,23 +1509,7 @@
     }
   })();
 
-  // ——— Mensaje a los novios: submit via mailto
-  const mensajeForm = document.getElementById('mensajeForm');
-  const mensajeSent = document.getElementById('mensajeSent');
-  if (mensajeForm) {
-    mensajeForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const nombre = document.getElementById('msgNombre').value.trim();
-      const texto  = document.getElementById('msgTexto').value.trim();
-      if (!texto) return;
-      const subject = encodeURIComponent('Mensaje de ' + (nombre || 'un invitado'));
-      const body    = encodeURIComponent((nombre ? nombre + ' dice:\n\n' : '') + texto);
-      // Update this email address to yours before publishing
-      window.open('mailto:TU_EMAIL@gmail.com?subject=' + subject + '&body=' + body, '_blank');
-      mensajeForm.hidden = true;
-      mensajeSent.hidden = false;
-    });
-  }
+
 
   // ——— Copy alias buttons
   document.querySelectorAll('.copy-btn').forEach(btn => {
@@ -1588,59 +1671,50 @@
 <script>
   // ——— Photo Carousel ———
   (function () {
-    const track  = document.getElementById('pcTrack');
-    const slides = track ? Array.from(track.querySelectorAll('.pc-slide')) : [];
+    const viewport = document.querySelector('.pc-viewport');
+    const track    = document.getElementById('pcTrack');
+    const slides   = track ? Array.from(track.querySelectorAll('.pc-slide')) : [];
     if (!slides.length) return;
 
-    let current   = 0;
-    let direction = 0;
-    let timer     = null;
-    let animating = false;
+    let current = 0;
+    let timer   = null;
+    const total = slides.length;
 
-    slides[0].classList.add('active');
+    function slideW() { return viewport ? viewport.offsetWidth : 0; }
 
-    function goTo(idx) {
-      if (animating) return;
-      const next = (idx + slides.length) % slides.length;
-      if (next === current) return;
-      animating = true;
-
-      const incoming   = slides[next];
-      const outgoing   = slides[current];
-      const enterClass = direction % 2 === 0 ? 'pc-enter-left' : 'pc-enter-right';
-      direction++;
-
-      incoming.classList.add(enterClass);
-      incoming.style.transition = 'none';
-      incoming.offsetHeight; // force reflow
-      incoming.style.transition = '';
-
-      requestAnimationFrame(() => {
-        incoming.classList.remove(enterClass);
-        incoming.classList.add('active');
-        outgoing.classList.add('pc-exit');
-        outgoing.classList.remove('active');
-      });
-
-      setTimeout(() => {
-        outgoing.classList.remove('pc-exit');
-        current   = next;
-        animating = false;
-      }, 1700);
+    function setSlideSizes() {
+      const w = slideW();
+      slides.forEach(s => { s.style.width = w + 'px'; s.style.minWidth = w + 'px'; });
     }
 
-    function startAuto() { timer = setInterval(() => goTo(current + 1), 2500); }
+    function goTo(idx) {
+      current = (idx + total) % total;
+      track.style.transform = 'translateX(-' + (current * slideW()) + 'px)';
+    }
+
+    window.addEventListener('resize', () => { setSlideSizes(); goTo(current); });
+    // Wait for layout before measuring
+    requestAnimationFrame(() => { setSlideSizes(); goTo(0); startAuto(); });
+    window.addEventListener('load', () => { setSlideSizes(); goTo(current); });
+
+    function startAuto() { timer = setInterval(() => goTo(current + 1), 3500); }
     function stopAuto()  { clearInterval(timer); }
 
-    startAuto();
+    const prevBtn = document.getElementById('pcPrev');
+    const nextBtn = document.getElementById('pcNext');
+    if (prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
 
+    // Touch swipe
     let startX = 0;
-    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAuto(); }, { passive: true });
-    track.addEventListener('touchend',   e => {
-      const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
-      startAuto();
-    }, { passive: true });
+    if (viewport) {
+      viewport.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+      viewport.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+        startAuto();
+      }, { passive: true });
+    }
   })();
 </script>
 
