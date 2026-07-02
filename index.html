@@ -375,8 +375,8 @@
   .hero .names {
     font-family: "Cherolina", "Brittany Signature", "Great Vibes", "Sacramento", cursive;
     font-style: normal;
-    font-weight: 400;
-    font-size: 60px;
+    font-weight: 600;
+    font-size: 50px;
     letter-spacing: 0em;
     text-transform: none;
     color: var(--burgundy);
@@ -479,8 +479,8 @@
   /* ——— Secret location ——— */
   .secret {
     text-align: center;
-    margin-top: 48px;
-    margin-bottom: 60px;
+    margin-top: 24px;
+    margin-bottom: 30px;
   }
   .secret .lock-badge {
     width: 34px;
@@ -560,14 +560,14 @@
   /* ——— Photo Carousel ——— */
   .photo-carousel {
     width: 100%;
-    padding: 40px 0 32px;
+    padding: 20px 0 16px;
     position: relative;
   }
   .pc-viewport {
     position: relative;
-    width: calc(100% - 48px);
-    margin: 0 auto;
-    border-radius: 12px;
+    width: calc(100% + 56px);
+    margin: 0 -28px;
+    border-radius: 0;
     overflow: hidden;
     height: 340px;
   }
@@ -616,10 +616,11 @@
   .pc-arrow:active { transform: translateY(-50%) scale(0.94); }
   .pc-arrow-prev { left: 10px; }
   .pc-arrow-next { right: 10px; }
+  .pc-arrow { display: none; }
 
   /* ——— Itinerary ——— */
   .itinerary {
-    margin-top: 8px;
+    margin-top: 4px;
   }
   .itin-card {
     margin: 0 auto;
@@ -721,7 +722,7 @@
   }
 
   /* ——— Dress code ——— */
-  .dress { text-align: center; margin-top: 56px; }
+  .dress { text-align: center; margin-top: 28px; }
   .dress img {
     width: 90px;
     margin: 0 auto 14px;
@@ -744,6 +745,7 @@
     letter-spacing: 0.04em;
     text-transform: none;
     margin-top: 12px;
+    margin-bottom: 18px;
   }
   .dress .note {
     display: inline-block;
@@ -770,17 +772,23 @@
     font-size: 13px;
     letter-spacing: 0.03em;
     color: var(--cocoa);
-    margin: 0 0 14px;
+    margin: 0 0 28px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     line-height: 1.4;
   }
+  .taken-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
   .taken-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
     font-size: 12px;
     letter-spacing: 0.06em;
@@ -843,10 +851,10 @@
   }
 
   /* ——— Recommendations ——— */
-  .reco { text-align: center; margin-top: 56px; }
+  .reco { text-align: center; margin-top: 28px; }
 
   /* ——— RSVP / Asistencia ——— */
-  .rsvp { text-align: center; margin-top: 56px; }
+  .rsvp { text-align: center; margin-top: 28px; }
   .rsvp img { width: 90px; margin: 0 auto 14px; }
   .rsvp .body-text { margin: 0 auto 18px; max-width: 280px; }
 
@@ -854,12 +862,12 @@
   .pagebreak {
     border: 0;
     border-top: 1px dashed var(--line);
-    margin: 64px auto;
+    margin: 32px auto;
     width: 30%;
   }
 
   /* ——— Obsequio ——— */
-  .gift { text-align: center; margin-top: 8px; }
+  .gift { text-align: center; margin-top: 4px; }
   .gift img { width: 90px; margin: 0 auto 18px; }
   .gift .body-text { margin: 0 auto 10px; max-width: 290px; }
   .gift-accounts-label {
@@ -1144,17 +1152,13 @@
   <!-- ——— HERO ——— -->
   <section class="hero reveal">
     <!-- Título GIF — comentar la línea de abajo y descomentar el h1 para volver al texto -->
-    <img alt="¡Nos casamos!" class="titulo-gif titulo-gif-hidden" id="tituloGif" />
-    <!-- <h1 class="display">¡Nos casamos!</h1> -->
+    <!-- <img alt="¡Nos casamos!" class="titulo-gif titulo-gif-hidden" id="tituloGif" /> -->
+    <h1 class="display" style="font-size: 80px;">¡Nos casamos!</h1>
     <div class="hero-art" id="heroArt">
       <img src="assets/dibujo web.png" alt="Paloma y Fran" class="ha-couple" />
     </div>
     <div class="date">21 · 11 · 2026</div>
     <div class="names">Paloma &amp; Francisco</div>
-    <div class="names">Paloma y Francisco</div>
-    <div class="names names-cormorant">Paloma y Francisco</div>
-    <div class="names names-cormorant">Paloma <span class="amp">&amp;</span> Francisco</div>
-    <div class="names names-cormorant">Paloma &amp; Francisco</div>
 
 
     <div class="countdown" aria-live="polite">
@@ -1162,6 +1166,10 @@
       <div class="cell"><div class="num" id="cd-h">--</div><div class="lbl">Horas</div></div>
       <div class="cell"><div class="num" id="cd-m">--</div><div class="lbl">Minutos</div></div>
       <div class="cell"><div class="num" id="cd-s">--</div><div class="lbl">Segundos</div></div>
+    </div>
+
+    <div class="btn-row" style="margin-top: 28px;">
+      <a class="btn" href="https://calendar.app.google/zeoshz5NYn2C1R6m8" target="_blank" rel="noopener">Agendar</a>
     </div>
   </section>
 
@@ -1199,30 +1207,41 @@
       <div class="itin-list">
       <div class="itin-item">
         <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo ceremonia.png" alt="Ceremonia" style="width:52px;height:52px;object-fit:contain;" />
+          <img src="assets/dibujo ceremonia.png" alt="Ceremonia" style="width:36px;height:36px;object-fit:contain;" />
         </span>
         <div class="time"><span class="h">16:30</span> hs &middot; Ceremonia</div>
       </div>
 
       <div class="itin-item">
         <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo recepcion.png" alt="Recepción" style="width:52px;height:52px;object-fit:contain;" />
+          <img src="assets/dibujo recepcion.png" alt="Recepción" style="width:36px;height:36px;object-fit:contain;" />
         </span>
         <div class="time"><span class="h">18:00</span> hs &middot; Recepción</div>
       </div>
 
       <div class="itin-item">
         <span class="itin-icon" aria-hidden="true">
-          <img src="assets/dibujo civil.png" alt="Civil" style="width:52px;height:52px;object-fit:contain;" />
+          <img src="assets/dibujo civil.png" alt="Civil" style="width:36px;height:36px;object-fit:contain;" />
         </span>
         <div class="time"><span class="h">19:00</span> hs &middot; Civil</div>
       </div>
 
       <div class="itin-item">
         <span class="itin-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:36px;height:36px;">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+            <path d="M7 2v20"></path>
+            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+          </svg>
+        </span>
+        <div class="time"><span class="h">21:00</span> hs &middot; Cena</div>
+      </div>
+
+      <div class="itin-item">
+        <span class="itin-icon" aria-hidden="true">
           <img src="assets/dibujo fiesta.png" alt="Fiesta" style="width:52px;height:52px;object-fit:contain;" />
         </span>
-        <div class="time"><span class="h">20:00</span> hs &middot; Fiesta</div>
+        <div class="time"><span class="h">22:30</span> hs &middot; Fiesta</div>
       </div>
     </div>
   </div>
@@ -1274,8 +1293,10 @@
     <div class="label">Elegante</div>
     <div class="dress-taken">
       <span>Estos colores ya tienen dueño:</span>
-      <span class="taken-item"><span class="taken-swatch swatch-white"></span>Blanco &rarr; Paloma</span>
-      <span class="taken-item"><span class="taken-swatch swatch-beige"></span>Beige &rarr; Francisco</span>
+      <div class="taken-list">
+        <span class="taken-item"><span class="taken-swatch swatch-white"></span>Blanco &rarr; Paloma</span>
+        <span class="taken-item"><span class="taken-swatch swatch-beige"></span>Beige &rarr; Francisco</span>
+      </div>
     </div>
     <a class="btn" href="https://pin.it/5YqnMKSGc" target="_blank" rel="noopener">Inspiración</a>
   </section>
@@ -1337,8 +1358,7 @@
   <!-- ——— CAR ——— -->
   <div class="car-wrap reveal" id="car">
     <img src="assets/car.png" alt="Just married" class="illus" />
-    <img class="car-cue" id="preparateGif" alt="¡Preparate!" />
-    <!-- <span class="car-cue">¡Preparate!</span> -->
+    <span class="display car-cue">¡Preparate!</span>
   </div>
 
   <!-- ——— FOOTER MONOGRAM ——— -->
