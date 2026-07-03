@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Paloma &amp; Fran · 21·11·2026</title>
+<title>Paloma &amp; Francisco · 21·11·2026</title>
 <link rel="icon" type="image/png" href="assets/dibujo ceremonia.png" />
 <meta property="og:title" content="Paloma &amp; Fran · 21·11·2026" />
 <meta property="og:description" content="¡Nos casamos! Te invitamos a celebrar con nosotros en Mendoza." />
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Paloma &amp; Fran · 21·11·2026" />
-<meta name="twitter:image" content="assets/og-image.png" />
+<meta name="twitter:image" content="assets/og-2.jpg" />
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FVTQZ7Q2D4"></script>
 <script>
@@ -226,6 +226,16 @@
     margin-bottom: 72px;
   }
 
+  /* "¡Nos casamos!" must stay on one line at any width/OS text-scale: size is
+     driven only by vw + px (clamp), never rem/em, so it ignores accessibility
+     font scaling; nowrap forbids wrapping. */
+  .hero h1.display {
+    white-space: nowrap;
+    font-size: clamp(48px, calc(21.7vw - 12px), 80px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   .section-title {
     font-family: var(--serif);
     font-style: italic;
@@ -376,7 +386,10 @@
     font-family: "Cherolina", "Brittany Signature", "Great Vibes", "Sacramento", cursive;
     font-style: normal;
     font-weight: 600;
-    font-size: 50px;
+    font-size: clamp(32px, calc(15.2vw - 8.6px), 50px);
+    white-space: nowrap;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     letter-spacing: 0em;
     text-transform: none;
     color: var(--burgundy);
@@ -602,9 +615,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     cursor: pointer;
     z-index: 2;
     font-size: 22px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     line-height: 1;
     padding: 0 0 1px;
     transition: background 0.15s ease, opacity 0.15s ease;
@@ -616,7 +632,16 @@
   .pc-arrow:active { transform: translateY(-50%) scale(0.94); }
   .pc-arrow-prev { left: 10px; }
   .pc-arrow-next { right: 10px; }
-  .pc-arrow { display: none; }
+  /* Arrows only make sense with a mouse; touch devices keep the clean swipe-only UI */
+  @media (hover: none), (pointer: coarse) {
+    .pc-arrow { display: none; }
+  }
+  /* Desktop/mouse: let the user click-drag the carousel like a swipe */
+  @media (hover: hover) and (pointer: fine) {
+    .pc-viewport { cursor: grab; }
+    .pc-viewport.dragging { cursor: grabbing; }
+  }
+  .pc-slide img { -webkit-user-drag: none; user-select: none; }
 
   /* ——— Itinerary ——— */
   .itinerary {
@@ -906,11 +931,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 6px;
     gap: 12px;
   }
   .account-card summary::-webkit-details-marker { display: none; }
   .account-card summary .caret {
     width: 8px; height: 8px;
+    flex-shrink: 0;
     border-right: 1.5px solid var(--burgundy);
     border-bottom: 1.5px solid var(--burgundy);
     transform: rotate(45deg);
@@ -927,6 +955,8 @@
   .account-card .field {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 4px;
     gap: 10px;
     font-size: 12px;
     font-family: var(--sans);
@@ -935,6 +965,7 @@
   }
   .account-card .field:last-child { border-bottom: 0; }
   .account-card .field .k {
+    flex-shrink: 0;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1151,7 +1182,7 @@
 
   <!-- ——— HERO ——— -->
   <section class="hero reveal">
-    <h1 class="display" style="font-size: 80px;">¡Nos casamos!</h1>
+    <h1 class="display">¡Nos casamos!</h1>
     <div class="hero-art" id="heroArt">
       <img src="assets/dibujo web.png" alt="Paloma y Fran" class="ha-couple" />
     </div>
@@ -1314,7 +1345,7 @@
   <section class="reco reveal">
     <h2 class="section-title">Recomendaciones</h2>
     <p class="body-text" style="max-width:300px;margin:0 auto 16px;">
-      Hoteles, transportes y lugares cerca del salón para que tu estadía en Mendoza sea perfecta.
+      Esperamos que disfrutes Mendoza tanto como nosotros. Acá te compartimos algunas de nuestras recomendaciones favoritas para que tu estadía sea inolvidable.
     </p>
     <a class="btn" href="https://www.google.com/maps/d/u/0/edit?mid=1ryjwYa6fAf7IC1ruTo_V-kWqFMXVTl0&usp=sharing" target="_blank" rel="noopener">Ver mapa</a>
   </section>
@@ -1729,6 +1760,25 @@
         if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
         startAuto();
       }, { passive: true });
+
+      // Mouse drag (desktop has no touch events)
+      let mouseDown = false;
+      let mouseStartX = 0;
+      viewport.addEventListener('mousedown', e => {
+        mouseDown = true;
+        mouseStartX = e.clientX;
+        stopAuto();
+        viewport.classList.add('dragging');
+      });
+      window.addEventListener('mouseup', e => {
+        if (!mouseDown) return;
+        mouseDown = false;
+        viewport.classList.remove('dragging');
+        const dx = e.clientX - mouseStartX;
+        if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+        startAuto();
+      });
+      viewport.addEventListener('dragstart', e => e.preventDefault());
     }
   })();
 </script>
