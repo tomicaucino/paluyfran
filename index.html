@@ -632,10 +632,7 @@
   .pc-arrow:active { transform: translateY(-50%) scale(0.94); }
   .pc-arrow-prev { left: 10px; }
   .pc-arrow-next { right: 10px; }
-  /* Arrows only make sense with a mouse; touch devices keep the clean swipe-only UI */
-  @media (hover: none), (pointer: coarse) {
-    .pc-arrow { display: none; }
-  }
+  .pc-arrow { display: none; }
   /* Desktop/mouse: let the user click-drag the carousel like a swipe */
   @media (hover: hover) and (pointer: fine) {
     .pc-viewport { cursor: grab; }
