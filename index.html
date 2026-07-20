@@ -1731,6 +1731,7 @@
 
     let current = 0;
     let timer   = null;
+    let hasEntered = false;
     const total = slides.length;
 
     function slideW() { return viewport ? viewport.offsetWidth : 0; }
@@ -1747,11 +1748,34 @@
 
     window.addEventListener('resize', () => { setSlideSizes(); goTo(current); });
     // Wait for layout before measuring
-    requestAnimationFrame(() => { setSlideSizes(); goTo(0); startAuto(); });
+    requestAnimationFrame(() => { setSlideSizes(); goTo(0); });
     window.addEventListener('load', () => { setSlideSizes(); goTo(current); });
 
-    function startAuto() { timer = setInterval(() => goTo(current + 1), 3500); }
+    function startAuto() {
+      clearInterval(timer);
+      if (!hasEntered) return;
+      timer = setInterval(() => goTo(current + 1), 3500);
+    }
     function stopAuto()  { clearInterval(timer); }
+
+    // Only kick off the automatic slide once the carousel has actually scrolled into view,
+    // so the pre-set photo order isn't shuffled through before the visitor sees it.
+    const carouselSection = document.getElementById('photoCarousel') || viewport;
+    if (carouselSection && 'IntersectionObserver' in window) {
+      const pcIO = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            hasEntered = true;
+            startAuto();
+            pcIO.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.35 });
+      pcIO.observe(carouselSection);
+    } else {
+      hasEntered = true;
+      startAuto();
+    }
 
     const prevBtn = document.getElementById('pcPrev');
     const nextBtn = document.getElementById('pcNext');
