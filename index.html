@@ -510,67 +510,6 @@
   .secret .lock-badge svg { width: 15px; height: 15px; display: block; }
   .secret .body-text { max-width: 280px; margin: 0 auto 22px; }
 
-  .countdown-pill {
-    display: inline-block;
-    background: var(--burgundy);
-    border: 1px solid var(--burgundy);
-    border-radius: 999px;
-    padding: 18px 36px;
-    margin: 0 auto;
-  }
-  .countdown-pill .hint,
-  .countdown-pill .secret-countdown .num,
-  .countdown-pill .secret-countdown .lbl {
-    color: var(--cream) !important;
-  }
-
-  .secret-countdown {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    justify-content: center;
-    gap: 28px;
-    margin: 0 auto;
-    max-width: 320px;
-  }
-  .secret-countdown .cell { text-align: center; }
-  .secret-countdown .num {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 1;
-    color: var(--burgundy);
-    font-variant-numeric: lining-nums;
-  }
-  .secret-countdown .lbl {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-top: 4px;
-    color: var(--burgundy);
-  }
-  .secret .hint {
-    margin-top: 18px;
-    font-family: var(--sans);
-    font-weight: 300;
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--cocoa);
-    opacity: 0.75;
-  }
-  .secret-reveal { animation: secret-pop .9s cubic-bezier(.2,.7,.3,1) both; }
-  @keyframes secret-pop {
-    from { opacity: 0; transform: translateY(8px) scale(.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .secret-reveal { animation: none; }
-  }
-
   /* ——— Photo Carousel ——— */
   .photo-carousel {
     width: 100%;
@@ -1287,7 +1226,7 @@
   <section class="secret reveal" id="secret">
     <h2 class="section-title">Secret Location</h2>
 
-    <!-- Locked state: countdown to the reveal -->
+    <!-- Locked state -->
     <div id="secretLocked">
       <div class="lock-badge" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -1296,19 +1235,6 @@
         </svg>
       </div>
       <p class="body-text">La ubicación es sorpresa. Se revelará unos días antes de la boda.</p>
-      <div class="countdown-pill" hidden style="display:none">
-        <div class="secret-countdown" aria-live="polite">
-          <div class="cell"><div class="num" id="sc-d">--</div><div class="lbl">Días</div></div>
-          <div class="cell"><div class="num" id="sc-h">--</div><div class="lbl">Horas</div></div>
-        </div>
-        <div class="hint">Faltan para descubrirla</div>
-      </div>
-    </div>
-
-    <!-- Revealed state -->
-    <div id="secretRevealed" class="secret-reveal" hidden>
-      <p class="body-text">¡La ubicación ya está disponible!</p>
-      <a class="btn" href="#" target="_blank" rel="noopener">Ver la bodega</a>
     </div>
   </section>
 
@@ -1524,45 +1450,6 @@
   }
   tick();
   setInterval(tick, 1000);
-
-  // ——— Secret location: reveal the bodega button 30 days before the wedding
-  (function () {
-    const REVEAL = TARGET - 30 * 86400000; // 30 days before the ceremony
-    const locked = document.getElementById('secretLocked');
-    const revealed = document.getElementById('secretRevealed');
-    if (!locked || !revealed) return;
-
-    const sEls = {
-      d: document.getElementById('sc-d'),
-      h: document.getElementById('sc-h')
-    };
-
-    let timer = null;
-    function showRevealed() {
-      if (timer) { clearInterval(timer); timer = null; }
-      locked.hidden = true;
-      revealed.hidden = false;
-    }
-
-    function secretTick() {
-      const diff = REVEAL - Date.now();
-      if (diff <= 0) {
-        showRevealed();
-        return;
-      }
-      sEls.d.textContent = pad(Math.floor(diff / 86400000));
-      sEls.h.textContent = pad(Math.floor((diff % 86400000) / 3600000));
-    }
-
-    if (Date.now() >= REVEAL) {
-      showRevealed();
-    } else {
-      secretTick();
-      timer = setInterval(secretTick, 1000);
-    }
-  })();
-
-
 
   // ——— Copy alias buttons
   document.querySelectorAll('.copy-btn').forEach(btn => {
