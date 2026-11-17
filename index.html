@@ -510,6 +510,62 @@
   .secret .lock-badge svg { width: 15px; height: 15px; display: block; }
   .secret .body-text { max-width: 280px; margin: 0 auto 22px; }
 
+  .countdown-pill {
+    display: inline-block;
+    background: var(--burgundy);
+    border: 1px solid var(--burgundy);
+    border-radius: 999px;
+    padding: 18px 32px;
+    margin: 0 auto;
+  }
+  .countdown-pill .hint,
+  .countdown-pill .secret-countdown .num,
+  .countdown-pill .secret-countdown .lbl {
+    color: var(--cream) !important;
+  }
+  .secret-countdown {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: center;
+    gap: 20px;
+    margin: 0 auto;
+  }
+  .secret-countdown .cell { text-align: center; }
+  .secret-countdown .num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .secret-countdown .lbl {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .secret .hint {
+    margin-top: 14px;
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .secret-reveal { animation: secret-pop .9s cubic-bezier(.2,.7,.3,1) both; }
+  @keyframes secret-pop {
+    from { opacity: 0; transform: translateY(8px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .secret-reveal { animation: none; }
+  }
+
   /* ——— Photo Carousel ——— */
   .photo-carousel {
     width: 100%;
@@ -1234,7 +1290,22 @@
           <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path>
         </svg>
       </div>
-      <p class="body-text">La ubicación es sorpresa. Se revelará unos días antes de la boda.</p>
+      <p class="body-text">La ubicación es sorpresa. Se revelará el sábado a las 16:00.</p>
+      <div class="countdown-pill">
+        <div class="secret-countdown" aria-live="polite">
+          <div class="cell"><div class="num" id="sc-d">--</div><div class="lbl">Días</div></div>
+          <div class="cell"><div class="num" id="sc-h">--</div><div class="lbl">Horas</div></div>
+          <div class="cell"><div class="num" id="sc-m">--</div><div class="lbl">Min</div></div>
+          <div class="cell"><div class="num" id="sc-s">--</div><div class="lbl">Seg</div></div>
+        </div>
+        <div class="hint">Faltan para descubrirla</div>
+      </div>
+    </div>
+
+    <!-- Revealed state -->
+    <div id="secretRevealed" class="secret-reveal" hidden>
+      <p class="body-text">¡La ubicación ya está disponible!</p>
+      <a class="btn" href="https://maps.app.goo.gl/wSTfVQ3cMyMWHt9o9" target="_blank" rel="noopener">Ver ubicación secreta</a>
     </div>
   </section>
 
@@ -1450,6 +1521,31 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  // ——— Secret location: countdown until Saturday 16:00, then reveal the map button
+  (function () {
+    const REVEAL = new Date('2026-11-21T16:00:00-03:00').getTime();
+    const locked = document.getElementById('secretLocked');
+    const revealed = document.getElementById('secretRevealed');
+    if (!locked || !revealed) return;
+    const sEls = ['d', 'h', 'm', 's'].map(k => document.getElementById('sc-' + k));
+    let timer = null;
+    function secretTick() {
+      const diff = REVEAL - Date.now();
+      if (diff <= 0) {
+        if (timer) clearInterval(timer);
+        locked.hidden = true;
+        revealed.hidden = false;
+        return;
+      }
+      sEls[0].textContent = pad(Math.floor(diff / 86400000));
+      sEls[1].textContent = pad(Math.floor((diff % 86400000) / 3600000));
+      sEls[2].textContent = pad(Math.floor((diff % 3600000) / 60000));
+      sEls[3].textContent = pad(Math.floor((diff % 60000) / 1000));
+    }
+    secretTick();
+    if (Date.now() < REVEAL) timer = setInterval(secretTick, 1000);
+  })();
 
   // ——— Copy alias buttons
   document.querySelectorAll('.copy-btn').forEach(btn => {
