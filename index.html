@@ -1305,7 +1305,7 @@
     <!-- Revealed state -->
     <div id="secretRevealed" class="secret-reveal" hidden>
       <p class="body-text">¡La ubicación ya está disponible!</p>
-      <a class="btn" href="https://maps.app.goo.gl/wSTfVQ3cMyMWHt9o9" target="_blank" rel="noopener">Ver ubicación secreta</a>
+      <a class="btn" id="secretLink" href="#" target="_blank" rel="noopener">Ver ubicación secreta</a>
     </div>
   </section>
 
@@ -1534,6 +1534,10 @@
       const diff = REVEAL - Date.now();
       if (diff <= 0) {
         if (timer) clearInterval(timer);
+        const k = [0x5a, 0x17, 0x2c, 0x41, 0x63, 0x08, 0x3e];
+        const d = [49,12,120,88,95,13,115,113,46,34,31,70,12,88,92,48,54,3,123,61,16,103,12,38,2,103,42,95,38,16,49,77,122,117,17,50,16,49,88,99,50];
+        const link = document.getElementById('secretLink');
+        if (link) link.href = d.slice().reverse().map((c, i) => String.fromCharCode(c ^ k[i % k.length])).join('');
         locked.hidden = true;
         revealed.hidden = false;
         return;
